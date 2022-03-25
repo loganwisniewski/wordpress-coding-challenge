@@ -111,7 +111,17 @@ class Block {
 
 			if ( $query->have_posts() ) :
 				?>
-				<h2>5 posts with the tag of foo and the category of baz</h2>
+
+				<h2>
+					<?php
+					echo sprintf(
+						'%d %s with the tag of foo and the category of baz.',
+						( $query->found_posts > 5 ? 5 : $query->found_posts ),
+						( 1 === $query->found_posts ? 'post' : 'posts' )
+					);
+					?>
+				</h2>
+
 				<ul>
 				<?php
 				foreach ( array_slice( $query->posts, 0, 5 ) as $post ) :
