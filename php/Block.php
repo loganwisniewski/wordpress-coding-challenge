@@ -125,7 +125,9 @@ class Block {
 				<ul>
 				<?php
 				foreach ( array_slice( $query->posts, 0, 5 ) as $post ) :
-					echo '<li>' . esc_html( $post->post_title ) . '</li>';
+					?>
+					<li><?php echo esc_html( $post->post_title ); ?></li>
+					<?php
 				endforeach;
 			endif;
 			?>
