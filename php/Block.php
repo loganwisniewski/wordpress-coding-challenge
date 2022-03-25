@@ -39,7 +39,7 @@ class Block {
 	 * @return void
 	 */
 	public function init() {
-		add_action( 'init', [ $this, 'register_block' ] );
+		add_action( 'init', array( $this, 'register_block' ) );
 	}
 
 	/**
@@ -48,9 +48,9 @@ class Block {
 	public function register_block() {
 		register_block_type_from_metadata(
 			$this->plugin->dir(),
-			[
-				'render_callback' => [ $this, 'render_callback' ],
-			]
+			array(
+				'render_callback' => array( $this, 'render_callback' ),
+			)
 		);
 	}
 
@@ -63,10 +63,9 @@ class Block {
 	 * @return string The markup of the block.
 	 */
 	public function render_callback( $attributes, $content, $block ) {
-		$post_types = get_post_types( [ 'public' => true ] );
+		$post_types = get_post_types( array( 'public' => true ) );
 		$class_name = $attributes['className'];
 		ob_start();
-
 		?>
 		<div class="<?php echo esc_attr( $class_name ); ?>">
 			<h2>Post Counts</h2>
@@ -76,48 +75,47 @@ class Block {
 				$post_type_object = get_post_type_object( $post_type_slug );
 				$post_count       = count(
 					get_posts(
-						[
+						array(
 							'post_type'      => $post_type_slug,
 							'posts_per_page' => -1,
-						]
+						)
 					)
 				);
-
 				?>
 				<li><?php echo esc_html( sprintf( 'There are %d %s.', $post_count, $post_type_object->labels->name ) ); ?></li>
 			<?php endforeach; ?>
-			</ul><p><?php echo esc_html( sprintf( 'The current post ID is %s.', get_the_ID() ) ); ?></p>
+			</ul>
+			
+			<p><?php echo esc_html( sprintf( 'The current post ID is %d.', get_the_ID() ) ); ?></p>
 
 			<?php
-			$query = new WP_Query( 
-				[
-					'post_type'     => [ 'post', 'page' ],
+			$query = new WP_Query(
+				array(
+					'post_type'     => array( 'post', 'page' ),
 					'post_status'   => 'any',
-					'date_query'    => [
-						[
+					'date_query'    => array(
+						array(
 							'hour'    => 9,
 							'compare' => '>=',
-						],
-						[
+						),
+						array(
 							'hour'    => 17,
 							'compare' => '<=',
-						],
-					],
+						),
+					),
 					'tag'           => 'foo',
 					'category_name' => 'baz',
-					'post__not_in'  => [ get_the_ID() ],
-				]
+					'post__not_in'  => array( get_the_ID() ),
+				)
 			);
 
 			if ( $query->have_posts() ) :
 				?>
 				<h2>5 posts with the tag of foo and the category of baz</h2>
 				<ul>
-				<?php 
-				foreach ( array_slice( $query->posts, 0, 5 ) as $post ) : 
-					?>
-					<li><?php echo esc_html( $post->post_title ); ?></li>
-					<?php 
+				<?php
+				foreach ( array_slice( $query->posts, 0, 5 ) as $post ) :
+					echo '<li>' . esc_html( $post->post_title ) . '</li>';
 				endforeach;
 			endif;
 			?>
