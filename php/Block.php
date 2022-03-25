@@ -68,7 +68,7 @@ class Block {
 		ob_start();
 
 		?>
-		<div class="<?php echo $class_name; ?>">
+		<div class="<?php echo esc_attr( $class_name ); ?>">
 			<h2>Post Counts</h2>
 			<ul>
 			<?php
@@ -84,9 +84,9 @@ class Block {
 				);
 
 				?>
-				<li><?php echo 'There are ' . $post_count . ' ' . $post_type_object->labels->name . '.'; ?></li>
+				<li><?php echo esc_html( sprintf( 'There are %d %s.', $post_count, $post_type_object->labels->name ) ); ?></li>
 			<?php endforeach; ?>
-			</ul><p><?php echo 'The current post ID is ' . $_GET['post_id'] . '.'; ?></p>
+			</ul><p><?php echo esc_html( sprintf( 'The current post ID is %s.', $_GET['post_id'] ) ); ?></p>
 
 			<?php
 			$query = new WP_Query( 
@@ -116,7 +116,7 @@ class Block {
 				<?php 
 				foreach ( array_slice( $query->posts, 0, 5 ) as $post ) : 
 					?>
-					<li><?php echo $post->post_title; ?></li>
+					<li><?php echo esc_html( $post->post_title ); ?></li>
 					<?php 
 				endforeach;
 			endif;
