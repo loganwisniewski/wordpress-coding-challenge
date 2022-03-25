@@ -57,39 +57,33 @@ class Block {
 	/**
 	 * Renders the block.
 	 *
-	 * @param array    $attributes The attributes for the block.
-	 * @param string   $content    The block content, if any.
-	 * @param WP_Block $block      The instance of this block.
+	 * @param array $attributes The attributes for the block.
 	 * @return string The markup of the block.
 	 */
-	public function render_callback( $attributes, $content, $block ) {
+	public function render_callback( $attributes ) {
 		$post_types = get_post_types( array( 'public' => true ) );
 		$class_name = $attributes['className'];
 		ob_start();
 		?>
 		<div class="<?php echo esc_attr( $class_name ); ?>">
-		
 			<h2>Post Counts</h2>
-
 			<ul>
-			<?php
-			foreach ( $post_types as $post_type_slug ) :
-				$post_type_object = get_post_type_object( $post_type_slug );
-				$post_count       = count(
-					get_posts(
-						array(
-							'post_type'      => $post_type_slug,
-							'posts_per_page' => -1,
+				<?php
+				foreach ( $post_types as $post_type_slug ) :
+					$post_type_object = get_post_type_object( $post_type_slug );
+					$post_count       = count(
+						get_posts(
+							array(
+								'post_type'      => $post_type_slug,
+								'posts_per_page' => -1,
+							)
 						)
-					)
-				);
-				?>
-				<li><?php echo esc_html( sprintf( 'There are %d %s.', $post_count, $post_type_object->labels->name ) ); ?></li>
-			<?php endforeach; ?>
+					);
+					?>
+					<li><?php echo esc_html( sprintf( 'There are %d %s.', $post_count, $post_type_object->labels->name ) ); ?></li>
+				<?php endforeach; ?>
 			</ul>
-			
 			<p><?php echo esc_html( sprintf( 'The current post ID is %d.', get_the_ID() ) ); ?></p>
-
 			<?php
 			$query = new WP_Query(
 				array(
@@ -126,18 +120,20 @@ class Block {
 
 				<h2>
 					<?php
-					echo sprintf(
-						'%d %s with the tag of foo and the category of baz.',
-						( $post_count > 5 ? 5 : $post_count ),
-						( 1 === $query->found_posts ? 'post' : 'posts' )
+					echo esc_html(
+						sprintf(
+							'%d %s with the tag of foo and the category of baz.',
+							( $post_count > 5 ? 5 : $post_count ),
+							( 1 === $query->found_posts ? 'post' : 'posts' )
+						)
 					);
 					?>
 				</h2>
 
 				<ul>
-				<?php foreach ( $posts as $post ) : ?>
-					<li><?php echo esc_html( $post->post_title ); ?></li>
-				<?php endforeach; ?>
+					<?php foreach ( $posts as $post ) : ?>
+						<li><?php echo esc_html( $post->post_title ); ?></li>
+					<?php endforeach; ?>
 				</ul>
 
 			<?php endif; ?>
