@@ -86,7 +86,7 @@ class Block {
 				?>
 				<li><?php echo esc_html( sprintf( 'There are %d %s.', $post_count, $post_type_object->labels->name ) ); ?></li>
 			<?php endforeach; ?>
-			</ul><p><?php echo esc_html( sprintf( 'The current post ID is %s.', $_GET['post_id'] ) ); ?></p>
+			</ul><p><?php echo esc_html( sprintf( 'The current post ID is %s.', get_the_ID() ) ); ?></p>
 
 			<?php
 			$query = new WP_Query( 
