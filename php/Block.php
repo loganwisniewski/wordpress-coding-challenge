@@ -70,18 +70,18 @@ class Block {
 		<div class="<?php echo esc_attr( $class_name ); ?>">
 			<h2>Post Counts</h2>
 			<ul>
-			<?php
-			foreach ( $post_types as $post_type_slug ) :
-				$post_type_object = get_post_type_object( $post_type_slug );
-				$post_count       = count(
-					get_posts(
-						array(
-							'post_type'      => $post_type_slug,
-							'posts_per_page' => -1,
-						)
+		<?php
+		foreach ( $post_types as $post_type_slug ) :
+			$post_type_object = get_post_type_object( $post_type_slug );
+			$post_count       = count(
+				get_posts(
+					array(
+						'post_type'      => $post_type_slug,
+						'posts_per_page' => -1,
 					)
-				);
-				?>
+				)
+			);
+			?>
 				<li><?php echo esc_html( sprintf( 'There are %d %s.', $post_count, $post_type_object->labels->name ) ); ?></li>
 			<?php endforeach; ?>
 			</ul>
@@ -129,12 +129,14 @@ class Block {
 					<li><?php echo esc_html( $post->post_title ); ?></li>
 					<?php
 				endforeach;
+				?>
+				</ul>
+				<?php
 			endif;
 			?>
-			</ul>
 		</div>
-		<?php
+				<?php
 
-		return ob_get_clean();
+				return ob_get_clean();
 	}
 }
