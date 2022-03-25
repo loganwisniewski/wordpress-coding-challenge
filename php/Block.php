@@ -107,25 +107,35 @@ class Block {
 					),
 					'tag'           => 'foo',
 					'category_name' => 'baz',
-					'post__not_in'  => array( get_the_ID() ),
 				)
 			);
 
-			if ( $query->have_posts() ) :
+			$posts      = array_filter(
+				array_slice( $query->posts, 0, 5 ),
+				function( $post ) {
+					if ( get_the_ID() === $post->ID ) {
+						return false;
+					}
+					return true;
+				}
+			);
+			$post_count = count( $posts );
+
+			if ( $post_count > 0 ) :
 				?>
 
 				<h2>
 					<?php
 					echo sprintf(
 						'%d %s with the tag of foo and the category of baz.',
-						( $query->found_posts > 5 ? 5 : $query->found_posts ),
+						( $post_count > 5 ? 5 : $post_count ),
 						( 1 === $query->found_posts ? 'post' : 'posts' )
 					);
 					?>
 				</h2>
 
 				<ul>
-				<?php foreach ( array_slice( $query->posts, 0, 5 ) as $post ) : ?>
+				<?php foreach ( $posts as $post ) : ?>
 					<li><?php echo esc_html( $post->post_title ); ?></li>
 				<?php endforeach; ?>
 				</ul>
